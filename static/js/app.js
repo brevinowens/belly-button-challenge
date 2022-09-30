@@ -15,7 +15,7 @@ const showGraphs = () => {
             d3.select('.panel-body').append('h4').text(key.toUpperCase() + ': ' + val);
         });
 
-        var data = [
+        let data = [
             {
                 y: otu_ids.slice(0,10).map(x => 'OTU ' + x).reverse(),
                 x: sample_values.slice(0,10).reverse(),
@@ -25,6 +25,28 @@ const showGraphs = () => {
         ];
 
         Plotly.newPlot('bar', data);
+
+        let bubble_trace = {
+            x: otu_ids,
+            y: sample_values,
+            text: otu_labels, 
+            mode: 'markers',
+            marker: {
+              size: sample_values,
+              color: otu_ids,
+              colorscale: 'Jet'
+            }
+          };
+          
+          let bubble_data = [bubble_trace];
+          
+          let bubble_layout = {
+            title: 'OTU IDs found in Samples',
+            showlegend: false,
+          };
+          
+          Plotly.newPlot('bubble', bubble_data, bubble_layout);
+
     });
 };
 
@@ -35,6 +57,7 @@ d3.json('./samples.json').then(({ names }) => {
 
     showGraphs();
 });
+
 
 
 
